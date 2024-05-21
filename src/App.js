@@ -1,9 +1,11 @@
+import {React, BrowserRouter as Route, Switch} from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "./component/layout/Navbar";
 import Users from "./component/users/Users";
 import Search from "./component/users/Search";
+
 const App = () => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
