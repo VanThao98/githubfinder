@@ -1,33 +1,26 @@
-import {React, BrowserRouter as Route, Switch} from "react-router-dom";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./component/layout/Navbar";
-import Users from "./component/users/Users";
 import Search from "./component/users/Search";
+import About from "./component/pages/About";
+import NotFound from "./component/pages/NotFound";
 
 const App = () => {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://api.github.com/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
   return (
     <div className="App">
-      <Navbar />
-      <div className="container">
-        <h1>GitHub Users Data</h1>  
-      <Search />
-      </div>
-      {/* <Users users={users} /> */}
+      <Router>
+        <Navbar />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Search />} />
+            <Route path="/about" element={<About />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
 };
+
 export default App;
