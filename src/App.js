@@ -21,8 +21,7 @@ const App = () => {
     <div className="App">
       <Navbar />
       <div className="container">
-        <h1>GitHub Users Data</h1>
-      
+        <h1>GitHub Users Data</h1>  
       <Search />
       </div>
       {/* <Users users={users} /> */}
