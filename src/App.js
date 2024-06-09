@@ -5,6 +5,7 @@ import Navbar from "./component/layout/Navbar";
 import Search from "./component/users/Search";
 import About from "./component/pages/About";
 import NotFound from "./component/pages/NotFound";
+import Users from "./component/users/Users";
 
 const App = () => {
   return (
@@ -15,7 +16,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Search />} />
             <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/*" element={<NotFound />} /> 
+            <Route path="/user/:id" Component={Users}/>
           </Routes>
         </div>
       </Router>
