@@ -1,44 +1,50 @@
-import axios from "axios";
-import React, { useState } from "react";
-import Users from "./Users";
+// Search.js
+import React, { useState, useContext, useEffect } from "react";
+import Users from './Users';
+import { getUserSearch } from "../../data/api";
+import SearchContext from "../../context/SearchContext";
 
-const Search = ()=>{
-    const [text, setText] = useState("");
-    const [users, setUsers] = useState ([])
+const Search = () => {
+    const { searchQuery, setSearchQuery, searchResults, setSearchResults } = useContext(SearchContext);
+    const [text, setText] = useState(searchQuery);
 
-    const searchUsers = async (text) => {
-        try{
-            const response = await axios.get(`https://api.github.com/search/users?q=${text}`);
-            setUsers(response.data.items);
-        }catch (error) {
-            console.error("Error fetching data", error);
+    useEffect(() => {
+        setText(searchQuery);
+    }, [searchQuery]);
+
+    const searchUser = async (text) => {
+        try {
+            const users = await getUserSearch(text);
+            setSearchResults(users);
+        } catch (error) {
+            console.error("Display error", error);
         }
     };
 
-    const onSubmit = (e) =>{
+    const onSubmit = (e) => {
         e.preventDefault();
-        if(text === ""){
-            alert("Please enter something");
-        }else{
-            searchUsers(text);
-            setText();
+        if (text === "") {
+            alert('Please enter a search term');
+        } else {
+            searchUser(text);
+            setSearchQuery(text);
+            setText("");
         }
-    };
-
-    const clearUsers = () => {
-        setUsers ([]);
-    };
-
-    const onChange = (e) =>{
-        setText (e.target.value);
     }
-    return(
+
+    const onChange = (e) => setText(e.target.value);
+    const clearUsers = () => {
+        setSearchResults([]);
+        setSearchQuery('')
+    }
+
+    return (
         <div>
             <form onSubmit={onSubmit} className="form">
                 <input
                     type="text"
                     name="text"
-                    placeholder="Search user"
+                    placeholder="Search User"
                     value={text}
                     onChange={onChange}
                 />
@@ -48,11 +54,12 @@ const Search = ()=>{
                     className="btn btn-success btn-block"
                 />
             </form>
-            {users.length > 0 && (
-                <button className="btn btn-danger btn-block" onClick={clearUsers}> Clear </button>
+            {searchResults.length > 0 && (
+                <button className="btn btn-danger btn-block" onClick={clearUsers}>Clear</button>
             )}
-            <Users users={users}/>
+            <Users users={searchResults} />
         </div>
-    );
-};
+    )
+}
+
 export default Search;
